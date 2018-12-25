@@ -10,12 +10,19 @@ import UIKit
 import CoreData
 class ToDoListViewController: UITableViewController, UISearchBarDelegate {
 
+    var selectedcater : cater? {
+        didSet{
+            loaditems()
+        }
+    }
     let defualts = UserDefaults.standard
     
     var todolist = [Item]()
     
     let datapath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("item plist")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,6 +74,7 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
             let newitem = Item(context: context!)
             newitem.title = textfield.text!
             newitem.check = false
+            newitem.parent = self.selectedcater
             self.todolist.append(newitem)
             
             self.saveitems()
@@ -93,9 +101,19 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
         }
        self.tableView.reloadData()
     }
-    func loaditems(with req: NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loaditems(with req: NSFetchRequest<Item> = Item.fetchRequest(), predicate : NSPredicate? = nil ) {
 
+        let comppredicat = NSPredicate(format: "parent.names MATCHES %@", selectedcater!.names!)
+        
+        
         let req : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        if predicate != nil {
+        req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [comppredicat,predicate!])
+        }else{
+            req.predicate = comppredicat
+        }
+        
         do {
             todolist = try context.fetch(req)
         }catch{
@@ -108,7 +126,7 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let reqm : NSFetchRequest<Item> = Item.fetchRequest()
         
-        let predicar = NSPredicate(format: "title =[cd] %@", searchBar.text!)
+        let predicar = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         
         reqm.predicate = predicar
         
@@ -120,6 +138,8 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
         
         reqm.sortDescriptors = [sortDescriptors]
         
+        loaditems(with: reqm, predicate: predicar)
+        
         
         do {
             print("oppp")
@@ -128,11 +148,18 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
         }catch{
             print("k")
         }
-        
+    
         tableView.reloadData()
-        loaditems(with: reqm)
-        
-        saveitems()
+       
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loaditems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
     }
     
 }
