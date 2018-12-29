@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A886A0DB21CE520000F3F4D2 /* caterTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A886A0DA21CE520000F3F4D2 /* caterTableViewController.swift */; };
-		A8B9250221D56699006B0D18 /* docters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B9250121D56699006B0D18 /* docters.swift */; };
 		A8D59A142107C5900025F1D6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D59A132107C5900025F1D6 /* AppDelegate.swift */; };
 		A8D59A162107C5900025F1D6 /*  .swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D59A152107C5900025F1D6 /*  .swift */; };
 		A8D59A192107C5900025F1D6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8D59A172107C5900025F1D6 /* Main.storyboard */; };
@@ -23,7 +22,6 @@
 		4145BCAC79D764C2EFE10804 /* Pods-todoeyy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-todoeyy.debug.xcconfig"; path = "Pods/Target Support Files/Pods-todoeyy/Pods-todoeyy.debug.xcconfig"; sourceTree = "<group>"; };
 		878A828F828CA8CCB1F3D431 /* Pods_todoeyy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_todoeyy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A886A0DA21CE520000F3F4D2 /* caterTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = caterTableViewController.swift; sourceTree = "<group>"; };
-		A8B9250121D56699006B0D18 /* docters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = docters.swift; sourceTree = "<group>"; };
 		A8D59A102107C5900025F1D6 /* todoeyy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todoeyy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8D59A132107C5900025F1D6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8D59A152107C5900025F1D6 /*  .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " .swift"; sourceTree = "<group>"; };
@@ -87,7 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				A886A0DA21CE520000F3F4D2 /* caterTableViewController.swift */,
-				A8B9250121D56699006B0D18 /* docters.swift */,
 				A8D59A132107C5900025F1D6 /* AppDelegate.swift */,
 				A8D59A152107C5900025F1D6 /*  .swift */,
 				A8D59A27210F51E40025F1D6 /* Model.xcdatamodeld */,
@@ -216,7 +213,6 @@
 			files = (
 				A8D59A162107C5900025F1D6 /*  .swift in Sources */,
 				A8D59A26210C90EB0025F1D6 /* item.swift in Sources */,
-				A8B9250221D56699006B0D18 /* docters.swift in Sources */,
 				A8D59A142107C5900025F1D6 /* AppDelegate.swift in Sources */,
 				A886A0DB21CE520000F3F4D2 /* caterTableViewController.swift in Sources */,
 				A8D59A29210F51E40025F1D6 /* Model.xcdatamodeld in Sources */,
