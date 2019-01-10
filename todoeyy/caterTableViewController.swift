@@ -8,29 +8,33 @@
 
 import UIKit
 import CoreData
+import RealmSwift
+
 class caterTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-loadcateritems()
+//
+        loadcateritems()
         
     }
     
-    var lists = [cater]()
+    var lists: Results<caterg>?
 
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     
+    var realm = try! Realm()
    
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lists.count
+        return lists?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "catercell", for: indexPath)
-        cell2.textLabel?.text = lists[indexPath.row].names
+        cell2.textLabel?.text = lists?[indexPath.row].names ?? "nothing added yet"
         
         return cell2
         
@@ -43,7 +47,7 @@ loadcateritems()
         let destvc = segue.destination as? ToDoListViewController
         
         if let indexpath = tableView.indexPathForSelectedRow {
-            destvc?.selectedcater = lists[indexpath.row]
+            destvc?.selectedcater = lists?[indexpath.row]
         }
     }
     
@@ -54,10 +58,12 @@ loadcateritems()
         
         
        let action = UIAlertAction(title: "Yeah!", style: .default) { (action) in
-        let newitem = cater(context: self.context!)
+        
+       
+        let newitem = caterg()
         newitem.names = textfield2.text!
-        self.lists.append(newitem)
-        self.saveitems()
+       
+        self.save(cat: newitem)
         self.tableView.reloadData()
         }
         
@@ -74,11 +80,13 @@ loadcateritems()
         
     }
     
-    func saveitems() {
+    func save(cat : caterg) {
         
         do {
             
-            try context?.save()
+            try realm.write {
+                realm.add(cat)
+            }
             
         }
         catch {
@@ -89,13 +97,8 @@ loadcateritems()
     
     func loadcateritems() {
         
-        let req : NSFetchRequest<cater> = cater.fetchRequest()
-        do {
-            lists = (try context?.fetch(req))!
-        }catch{
-            print("k")
-        }
+       lists = realm.objects(caterg.self)
         tableView.reloadData()
     }
-    
+//
 }

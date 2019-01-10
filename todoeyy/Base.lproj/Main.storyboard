@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -80,12 +81,19 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="todoey" id="oEe-2R-zpQ">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="MsE-0Q-M9B">
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <action selector="buttonpressed:" destination="kZl-qs-gTK" id="zUZ-KU-bug"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="MsE-0Q-M9B">
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="buttonpressed:" destination="kZl-qs-gTK" id="zUZ-KU-bug"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="edit" id="42u-ru-EfN">
+                                <connections>
+                                    <action selector="editbutton:" destination="kZl-qs-gTK" id="FkV-TG-2LU"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jg2-yL-Wae" userLabel="First Responder" sceneMemberID="firstResponder"/>
