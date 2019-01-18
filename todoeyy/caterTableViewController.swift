@@ -9,14 +9,15 @@
 import UIKit
 import CoreData
 import RealmSwift
-
-class caterTableViewController: UITableViewController {
+import ChameleonFramework
+class caterTableViewController: swipeTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 //
         loadcateritems()
-        
+        tableView.rowHeight = 70
+        tableView.separatorStyle = .none
     }
     
     var lists: Results<caterg>?
@@ -25,7 +26,7 @@ class caterTableViewController: UITableViewController {
     
     var realm = try! Realm()
    
-    
+    var clr : UIColor = UIColor.randomFlat
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lists?.count ?? 1
@@ -33,12 +34,15 @@ class caterTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell2 = tableView.dequeueReusableCell(withIdentifier: "catercell", for: indexPath)
-        cell2.textLabel?.text = lists?[indexPath.row].names ?? "nothing added yet"
-        
-        return cell2
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        cell.textLabel?.text = lists?[indexPath.row].names ?? "nothing added yet"
+        cell.backgroundColor = UIColor(hexString: lists?[indexPath.row].color ?? "C1FFF2")
+        return cell
         
     }
+
+    
+   
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "gotoscreen", sender: self)
@@ -62,6 +66,9 @@ class caterTableViewController: UITableViewController {
        
         let newitem = caterg()
         newitem.names = textfield2.text!
+        newitem.color = UIColor.randomFlat.hexValue()
+        
+        
        
         self.save(cat: newitem)
         self.tableView.reloadData()
@@ -100,5 +107,22 @@ class caterTableViewController: UITableViewController {
        lists = realm.objects(caterg.self)
         tableView.reloadData()
     }
-//
+    
+    override func updatemodel(at indexpath: IndexPath) {
+        if let currentc = self.lists?[indexpath.row] {
+                            do {
+            
+                                try self.realm.write {
+                                    self.realm.delete(currentc)
+                                }
+            
+                            }
+                            catch {
+                                print("error")
+                            }
+                        }
+                        
+    }
 }
+//
+

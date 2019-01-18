@@ -8,7 +8,8 @@
 
 import UIKit
 import RealmSwift
-class ToDoListViewController: UITableViewController, UISearchBarDelegate {
+import ChameleonFramework
+class ToDoListViewController: swipeTableViewController, UISearchBarDelegate {
 
     var selectedcater : caterg? {
         didSet{
@@ -25,7 +26,7 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.rowHeight = 60
         _ = Itemx()
        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
        
@@ -37,14 +38,39 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
         
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let clrhx = selectedcater?.color {
+            title = clrhx
+            guard let mll = navigationController?.navigationBar else {fatalError()}
+            if let nclr = UIColor(hexString: clrhx) {
+            mll.barTintColor = nclr
+            mll.tintColor = ContrastColorOf(nclr, returnFlat: true)
+                mll.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : ContrastColorOf(nclr, returnFlat: true) ]
+                search.barTintColor = nclr
+                
+                
+            }
+        }
+    }
 
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.navigationBar.barTintColor = FlatRed()
+    }
+    @IBOutlet weak var search: UISearchBar!
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todoitems?.count ?? 1
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellinuse", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = todoitems?[indexPath.row].title ?? "no items added?"
         
+        if let clr = UIColor(hexString: (selectedcater?.color)!)?.darken(byPercentage: CGFloat(indexPath.row)/CGFloat((todoitems?.count)!)) {
+                  cell.backgroundColor = clr
+            cell.textLabel?.textColor = ContrastColorOf(clr, returnFlat: true)
+        }
+    
         cell.accessoryType = (todoitems?[indexPath.row].check)! ? .checkmark : .none
         return cell
     }
@@ -145,38 +171,27 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
         tableView.reloadData()
     }
 
-    
+    override func updatemodel(at indexpath: IndexPath) {
+        if let currentc = self.todoitems?[indexpath.row] {
+            do {
+                
+                try self.realm.write {
+                    self.realm.delete(currentc)
+                }
+                
+            }
+            catch {
+                print("error")
+            }
+        }
+    }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         todoitems = todoitems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "datecreated", ascending: true)
         
         tableView.reloadData()
-//        let reqm : NSFetchRequest<Item> = Item.fetchRequest()
-//
-//        let predicar = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//
-//        reqm.predicate = predicar
-//
-//        print("llllll")
-//        print(searchBar.text!)
 //
 //
-//        let sortDescriptors = NSSortDescriptor(key: "title", ascending: true)
-//
-//        reqm.sortDescriptors = [sortDescriptors]
-//
-//        loaditems(with: reqm, predicate: predicar)
-//
-//
-//        do {
-//            print("oppp")
-//
-//            todolist = try context.fetch(reqm)
-//        }catch{
-//            print("k")
-//        }
-//
-//        tableView.reloadData()
        
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -190,24 +205,3 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     }
     
 }
-//extension t: UISearchBarDelegate {
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        let reqm : NSFetchRequest<Item> = Item.fetchRequest()
-//        reqm.predicate = NSPredicate(format: "title CONTAINS[cd] %", searchBar.text!)
-//        print("llllll")
-//
-//
-//        reqm.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//
-//        do {
-//            todolist = try context.fetch(reqm)
-//        }catch{
-//            print("k")
-//        }
-//        tableView.reloadData()
-//        loaditems(with: reqm)
-//    }
-
-//}
-
